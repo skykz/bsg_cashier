@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:bsg/app.dart';
 import 'package:bsg/core/models/base_provider.dart';
 import 'package:bsg/core/models/z_report_model.dart';
+import 'package:bsg/utils/common_utils.dart';
 import 'package:flutter/material.dart';
 
 class ZReportScreen extends StatelessWidget{
@@ -68,7 +69,7 @@ class ZReportScreen extends StatelessWidget{
                           splashColor: Colors.orangeAccent[200],
                           child: Padding(
                             padding: const EdgeInsets.all(15.0),
-                            child: Text(
+                            child:Text(
                               model.getClosed?"Подтвердить \n успешную печать":"Подтвердить \n закрытие смены",
                               textAlign: TextAlign.center,
                               style: TextStyle(
@@ -78,25 +79,13 @@ class ZReportScreen extends StatelessWidget{
                             ),
                           ),
                           onPressed: () {
+                            if(!model.isLoading){
                              if(model.getClosed != true){
-                               _closeCashierShift(ctx,model);
+                                _closeCashierShift(ctx,model);                            
                              }else{
-                                Navigator.pushAndRemoveUntil(
-                                  context,
-                                  PageRouteBuilder(pageBuilder: (BuildContext context, Animation animation,
-                                      Animation secondaryAnimation) {
-                                    return MyApp();
-                                  }, transitionsBuilder: (BuildContext context, Animation<double> animation,
-                                      Animation<double> secondaryAnimation, Widget child) {
-                                    return  SlideTransition(
-                                      position:  Tween<Offset>(
-                                        begin: const Offset(1.0, 0.0),
-                                        end: Offset.zero,
-                                      ).animate(animation),
-                                      child: child,
-                                    );
-                                  }),
-                                  (Route route) => false);
+                               model.setLoading(true);
+                               signOut(context);
+                            }
                             }
                           },
                         ),
@@ -120,9 +109,7 @@ class ZReportScreen extends StatelessWidget{
                         ),
                         onPressed: (){
                           if(model.getClosed != true)
-                           Navigator.pop(context);
-                           else
-                           _printReport();
+                           Navigator.pop(context);                                                      
                            }
                       )
             ],
@@ -133,11 +120,10 @@ class ZReportScreen extends StatelessWidget{
   }
 
   _closeCashierShift(BuildContext ctx,ZReportModel model){
-      //TODO: print check with POS printer
-      model.closeShift(ctx);
+      model.closeShift(ctx).then((value){
+        if(value != null)
+                showCustomSnackBar(ctx, 'Смена успешно закрыта!', Colors.green, Icons.check_circle_outline);
+      });
   }
 
-  _printReport(){
-    log("print otchet");
-  }
 }

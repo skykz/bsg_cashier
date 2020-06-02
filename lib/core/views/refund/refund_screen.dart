@@ -360,9 +360,13 @@ class _MyAppState extends State<RefundScreen> {
       if(_textEditingController.text.length == 0 || _textEditingController.text == "0" || _textEditingController.text.isEmpty){
         showCustomSnackBar(ctx, 'Введите сумму!', Colors.redAccent, Icons.info_outline);
       }else{            
-        model.doRefundUser(widget.object['transaction_id'], context).then((value){          
-        }).whenComplete((){
-          showCustomSnackBar(ctx, "Ошибка от сервера", Colors.redAccent, Icons.info_outline);
+        model.doRefundUser(widget.object['transaction_id'], context).then((value){  
+          if(value != null)  
+            if(value['message'] == 'Возврат выполнен.')
+              showCustomSnackBar(ctx, "${value['message']}", Colors.green, Icons.check_circle_outline);
+
+        }).catchError((error){
+          showCustomSnackBar(ctx, "Ошибка: $error", Colors.redAccent, Icons.info_outline);
         });
       }
   }

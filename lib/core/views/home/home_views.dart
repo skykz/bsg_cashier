@@ -43,7 +43,8 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
   bool _connected = false;
   String pathImage;
   TestPrint testPrint;
-  
+  String cashier;
+
  Future checkShiftStatusIsOpen(BuildContext context) async {
     String imei = Provider.of<ImeiString>(context,listen: false).value;
     return _api.checkShiftIsOpen(imei,context);
@@ -53,7 +54,6 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
     String imei = Provider.of<ImeiString>(context,listen: false).value;
     return _api.getCashierShift(imei,context);
   }
-
 
   @override
   void initState() {    
@@ -95,7 +95,7 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
   }
 
     @override
-  void dispose() {
+  void dispose() {        
     _controller.dispose();
     super.dispose();
   }
@@ -269,11 +269,11 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
                         ),
                       ),
                     ),
-                  Builder(
-                       builder: (ctx) => IconButton(
-                      icon: Icon(Icons.print,color: Colors.purple,), 
-                      onPressed: () =>_testPrint),
-                  )
+                  // Builder(
+                  //      builder: (ctx) => IconButton(
+                  //     icon: Icon(Icons.print,color: Colors.purple,), 
+                  //     onPressed: () =>_testPrint(ctx)),
+                  // )
                 ],
               ),
               centerTitle: false,             
@@ -288,20 +288,46 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
                         stream: checkShiftStatus,
                         builder: (BuildContext context, AsyncSnapshot snapshot) {   
 
-                          if(snapshot.data == null)
+                          if(snapshot.connectionState == ConnectionState.waiting)
                              return LoadingWidget();    
 
                           if(snapshot.hasError)   
-                            showCustomSnackBar(context, "Данный терминал неизвестен. Обратитесь к администратору системы.", Colors.redAccent, Icons.info_outline);
+                             return Center(
+                                child: Container(
+                                  height: 50,
+                                  // width: 100,
+                                  color: Colors.red[100],
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10)
+                                  ),
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(30.0),
+                                    child: Text("${snapshot.error}"),
+                                  )),
+                              );
                                                
                         if(snapshot.data['open'] == true)                    
                           return StreamBuilder(
                           stream:getShift,
                           builder: (BuildContext context, AsyncSnapshot snapshot) {
-                            if (snapshot.data == null) 
-                              return LoadingWidget();                     
+                            if (snapshot.connectionState == ConnectionState.waiting) 
+                              return LoadingWidget();          
+
                             if(snapshot.hasError)   
-                              showCustomSnackBar(context, "Данный терминал неизвестен. Обратитесь к администратору системы.", Colors.redAccent, Icons.info_outline);  
+                              return Center(
+                                child: Container(
+                                  height: 50,
+                                  // width: 100,
+                                  color: Colors.red[100],
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10)
+                                  ),
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(30.0),
+                                    child: Text("${snapshot.error}"),
+                                  )),
+                              );
+                              // showCustomSnackBar(context, "Данный терминал неизвестен. Обратитесь к администратору системы.", Colors.redAccent, Icons.info_outline);  
                               
                               return  Expanded(
                                      child: Column(
@@ -316,7 +342,7 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
                                             return Center(
                                               child: Text("Загрузка..."),
                                             );                                                                                                 
-
+                                            cashier = snapshot.data;    
                                             return Text.rich(                                                                  
                                                   TextSpan(                        
                                                         text: 'Кассир: ',                                                  
@@ -335,26 +361,26 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
                                                   ),
                                               textAlign: TextAlign.center,
                                         );}),                                            
-                                  FlatButton(                          
-                                    shape:  RoundedRectangleBorder(
-                                        borderRadius:  BorderRadius.circular(10.0)),
-                                    color: Colors.blueAccent[100],
-                                    splashColor: Colors.white,
-                                    child: Container(
-                                      width: MediaQuery.of(context).size.width*0.6,
-                                      padding: const EdgeInsets.all(15),
-                                      child: const Text(
-                                        "Х-отчет",
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(
-                                            fontSize: 24,
-                                            color: Colors.white,
-                                            fontWeight: FontWeight.bold),
+                                  Builder(
+                                     builder: (ctx) => FlatButton(                          
+                                      shape:  RoundedRectangleBorder(
+                                          borderRadius:  BorderRadius.circular(10.0)),
+                                      color: Colors.blueAccent[100],
+                                      splashColor: Colors.white,
+                                      child: Container(
+                                        width: MediaQuery.of(context).size.width*0.6,
+                                        padding: const EdgeInsets.all(15),
+                                        child: const Text(
+                                          "Х-отчет",
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                              fontSize: 24,
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.bold),
+                                        ),
                                       ),
+                                      onPressed: () => _xReport(ctx)
                                     ),
-                                    onPressed: () => Navigator.push(
-                                          context,MaterialPageRoute(
-                                            builder: (context) => XReportScreen()))
                                   ),        
                                   FlatButton(
                                     shape:  RoundedRectangleBorder(
@@ -543,41 +569,51 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
     )));
   }
 
+  _xReport(BuildContext ctx) async {
+    dynamic list = await Navigator.push(
+                  context,MaterialPageRoute(
+                    builder: (context) => XReportScreen()));
+    if(list != null)                
+    _testPrint(ctx,list);
+
+  }
+
   @override
   bool get wantKeepAlive => true;
 
-   void _testPrint() async {
-    //SIZE
-    // 0- normal size text
-    // 1- only bold text
-    // 2- bold with medium text
-    // 3- bold with large text
-    //ALIGN
-    // 0- ESC_ALIGN_LEFT
-    // 1- ESC_ALIGN_CENTER
-    // 2- ESC_ALIGN_RIGHT
+   void _testPrint(BuildContext ctx,[dynamic list]) async {
+  
     bluetooth.isConnected.then((isConnected) {
       if (isConnected) {
-        bluetooth.printNewLine();
-        bluetooth.printCustom("HEADER", 3, 1);
-        bluetooth.printNewLine();
-        bluetooth.printImage(pathImage); //path of your image/logo
-        bluetooth.printNewLine();
-        bluetooth.printLeftRight("LEFT", "RIGHT", 0);
-        bluetooth.printLeftRight("LEFT", "RIGHT", 1);
-        bluetooth.printNewLine();
-        bluetooth.printLeftRight("LEFT", "RIGHT", 2);
-        bluetooth.printLeftRight("LEFT", "RIGHT", 3);
-        bluetooth.printLeftRight("LEFT", "RIGHT", 4);
-        bluetooth.printCustom("Body left", 1, 0);
-        bluetooth.printCustom("Body right", 0, 2);
-        bluetooth.printNewLine();
-        bluetooth.printCustom("Thank You", 2, 1);
-        bluetooth.printNewLine();
-        bluetooth.printQRcode("Insert Your Own Text to Generate", 200, 200, 1);
-        bluetooth.printNewLine();
-        bluetooth.printNewLine();
-        bluetooth.paperCut();
+        if(list['sales'].length > 0){
+            bluetooth.printNewLine();
+            bluetooth.printCustom("X-отчет", 3, 1);      
+            bluetooth.printCustom("-----------------------------", 2, 1);
+            bluetooth.printCustom(" Дата  | Топливо т / л | KZT / л", 2, 1);
+            bluetooth.printNewLine();
+
+          for (var i = 0; i < list['sales'].length; i++) {      
+            bluetooth.printCustom("$cashier", 1, 0);          
+            bluetooth.printCustom(" ${list['sales'][i]['datetime']}  | ${list['sales'][i]['fuel']}\n${list['sales'][i]['price']}| ${list['sales'][i]['quantity']}\n${list['sales'][i]['total_price']}", 2, 1);                                          
+            // bluetooth.printLeftRight("LEFT", "RIGHT", 0);
+            // bluetooth.printLeftRight("LEFT", "RIGHT", 1);
+            // bluetooth.printNewLine();
+            // bluetooth.printLeftRight("LEFT", "RIGHT", 2);
+            // bluetooth.printLeftRight("LEFT", "RIGHT", 3);
+            // bluetooth.printLeftRight("LEFT", "RIGHT", 4);
+            // bluetooth.printCustom("Body left", 1, 0);
+            // bluetooth.printCustom("Body right", 0, 2);
+            // bluetooth.printNewLine();
+            // bluetooth.printCustom("Thank You", 2, 1);
+            // bluetooth.printNewLine();
+            // bluetooth.printQRcode("Insert Your Own Text to Generate", 200, 200, 1);
+            // bluetooth.printNewLine();
+            bluetooth.printNewLine();
+            bluetooth.paperCut();
+          }
+        }
+      }else{
+        showCustomSnackBar(ctx, 'Bluetooth не подключен!', Colors.redAccent, Icons.info_outline);
       }
     });
   }

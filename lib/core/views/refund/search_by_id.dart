@@ -195,7 +195,7 @@ class _SearchByIdRefundState extends State<SearchByIdRefund> {
                                         child: Text("${DateTime.parse(model.getObject['datetime']).toLocal()}",style: TextStyle(fontWeight: FontWeight.bold),)),
                                       Flexible(
                                         flex: 2,
-                                        child: Text("${model.getObject['fuel']}\n ₸/л. ${model.getObject['price']}",style: TextStyle(fontWeight: FontWeight.bold),)),
+                                        child: Text("${model.getObject['fuel']}\n ${model.getObject['price']}  ₸/л.",style: TextStyle(fontWeight: FontWeight.bold),)),
                                       Flexible(
                                         flex: 2,
                                         child: Text("${model.getObject['total_price']}\n ${model.getObject['quantity']}",style: TextStyle(fontWeight: FontWeight.bold),))
@@ -243,7 +243,7 @@ class _SearchByIdRefundState extends State<SearchByIdRefund> {
                                               child: Text("${DateTime.parse(listSales['data'][i]['updated_at']).toLocal()}",style: TextStyle(fontWeight: FontWeight.bold),)),
                                             Flexible(
                                               flex: 2,
-                                              child: Text("${listSales['data'][i]['fuel']['name']}\n ₸/л. ${listSales['data'][i]['price']}",style: TextStyle(fontWeight: FontWeight.bold),)),
+                                              child: Text("${listSales['data'][i]['fuel']['name']}\n ${listSales['data'][i]['price']}  ₸/л.",style: TextStyle(fontWeight: FontWeight.bold),)),
                                             Flexible(
                                               flex: 2,
                                               child: Text("${listSales['data'][i]['total_price']}\n ${listSales['data'][i]['quantity']}",style: TextStyle(fontWeight: FontWeight.bold),))

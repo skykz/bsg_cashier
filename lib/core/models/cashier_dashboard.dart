@@ -24,8 +24,10 @@ class DashboardModel extends BaseBloc{
 
 
   Future doPayment( int fuelId,String quantity, double totalPrice,BuildContext context) async {
-    
-    return await _api.doCashierSalesPost(fuelId, quantity, totalPrice,context);
+    setLoading(true);
+    return await _api.doCashierSalesPost(fuelId, quantity, totalPrice,context).whenComplete((){
+      setLoading(false);
+    });
   }
 
   doCancelCashierSales(int id) async {
@@ -38,9 +40,5 @@ class DashboardModel extends BaseBloc{
 
     setLoading(false);
   } 
-
-  // Future getCashierSalesDetail(int id) async {
-
-  //   return await _api.searchSalesById(id);
-  // }
+ 
 }

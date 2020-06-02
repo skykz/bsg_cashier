@@ -5,7 +5,7 @@ import 'app.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  // HttpOverrides.global = new MyHttpOverrides();
+  
    SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
     .then((_) {
       runApp(MyApp());

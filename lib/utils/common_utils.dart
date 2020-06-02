@@ -1,5 +1,4 @@
 import 'package:bsg/api/repository/repositories_api.dart';
-import 'package:bsg/resources/components/info_response.dart';
 import 'package:flutter/material.dart';
 import 'package:bsg/resources/components/alert_dialog.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -23,7 +22,6 @@ Future alertAfterPayment(BuildContext context, String text,[Function onPressed,b
 
 
 void showCustomSnackBar(BuildContext context,String text,Color color,IconData iconData){
-
       Scaffold.of(context)
       ..hideCurrentSnackBar()
       ..showSnackBar(
@@ -47,17 +45,15 @@ void showCustomSnackBar(BuildContext context,String text,Color color,IconData ic
           ),
         ),
       );
-    }
+  }
 
-signOut(BuildContext context) async {
-SharedPreferences _sharedPreferences = await SharedPreferences.getInstance();
-  
+Future signOut(BuildContext context) async {
+ SharedPreferences _sharedPreferences = await SharedPreferences.getInstance();  
   _api.authLogout(context).then((value) async => {
     if(value['message'] == 'Вы вышли из системы.')
     {
       _sharedPreferences.clear(),
     
-
       Navigator.pushAndRemoveUntil(
       context,
       PageRouteBuilder(pageBuilder: (BuildContext context, Animation animation,
@@ -73,7 +69,7 @@ SharedPreferences _sharedPreferences = await SharedPreferences.getInstance();
           child: child,
         );
       }),
-      (Route route) => false)
+      (Route route) => false),
     }
   });
 }
@@ -90,18 +86,11 @@ Future<bool> exitApp(BuildContext context) {
   );
 }
 
-Future<bool> infoAlertDialog(BuildContext context,String title) {
-  return showDialog(
-    context: context,
-    builder: (context) => InfoAlertDialog(
-      title: title,       
-    ),
-  );
-}
 
-void printWrapped(String text) {
+void printWrapped(String text) {  
   final pattern = new RegExp('.{1,800}'); // 800 is the size of each chunk
   pattern.allMatches(text).forEach((match) => print(match.group(0)));
 }
+
 
  

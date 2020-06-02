@@ -13,30 +13,16 @@ class BsgAPI {
   static const AUTH_LOGIN = 'auth/login';
   static const AUTH_LOGOUT = 'auth/logout';
 
-  static const REGISTRATION = 'auth/register';
-  static const BALANCE = 'balance';
   static const CASHIER_SHIFT = 'cashier/shifts';
   static const CASHIER_SHIFT_CLOSE = 'cashier/shifts/close';
   static const CASHIER_SALES_POST = 'cashier/sales';
   static const CASHIER_SALES_CANCEL_BY_ID = 'cashier/sales/';
   static const CASHIER_SALES_GET = 'cashier/sales/';
-  static const CASHIER_SALES_BY_ID = 'cashier/sales/';
   static const CASHIER_SALES_PAID_BY_ID = 'cashier/sales/';
   static const CASHIER_SALES_REFUND_BY_ID = 'cashier/sales/';
   static const CHECK_SHIFT_STATUS = 'cashier/shifts/is_open';
   static const CASHIER_REPORT_X_REPORT_GET = '/cashier/reports/x-report';
-  static const CLIENT_SALES_ACCEPT = 'client/sales/accept';
-  static const CLIENT_REPORT_SALES_GET = 'client/reports/sales';
-  static const CLIENT_REPORT_TRANSACTIONS = 'client/reports/transactions';
-  static const CLIENT_TRANSFERS_SEARCH_USER = 'client/transfers/search_user';
-  static const CLIENT_TRANSFERS = 'client/transfers';
-  
-  //managers
-  static const MANAGER_BALANCE = 'manager/balance';
-  static const MANAGER_EMPLOYEES = 'manager/employees';
-  static const MANAGER_TRANSFERS = 'manager/transfers';
-  static const MANAGER_EMPLOYEES_BY_STATUS = 'manager/employees/{id}/status';
-  
+
 
   Future<dynamic> authLogin(String login,String password,[BuildContext context]) async {
     

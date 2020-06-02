@@ -333,7 +333,16 @@ class _MyAppState extends State<DashBoardCashier> {
                   child: Container(
                     width: MediaQuery.of(context).size.width*0.6,
                     padding: const EdgeInsets.all(15),
-                    child: Text(
+                    child: model.isLoading? Center(
+                      child: SizedBox(
+                                    height: 30,
+                                    width: 30,
+                                     child: CircularProgressIndicator(
+                                      backgroundColor: Colors.white,
+                                      strokeWidth: 2,
+                                    ),
+                                  ),
+                    ): Text(
                       "Оплатить",
                       textAlign: TextAlign.center,
                       style: TextStyle(

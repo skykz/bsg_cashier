@@ -85,7 +85,15 @@ class MQTTManager{
   void onDisconnected() {
     print('EXAMPLE::OnDisconnected client callback - Client disconnection');
     if (_client.connectionStatus.returnCode == MqttConnectReturnCode.notAuthorized) {
-      log('EXAMPLE::OnDisconnected callback is solicited, this is correct');
+      log('EXAMPLE::OnDisconnected callback is solicited, not Authorized! ');
+    }else if (_client.connectionStatus.returnCode == MqttConnectReturnCode.badUsernameOrPassword){
+        log('EXAMPLE::OnDisconnected callback is solicited, Bad Username or Password ');
+    }else if (_client.connectionStatus.returnCode == MqttConnectReturnCode.brokerUnavailable){
+        log('EXAMPLE::OnDisconnected callback is solicited, Broker unavailable');
+    }else if (_client.connectionStatus.returnCode == MqttConnectReturnCode.identifierRejected){
+        log('EXAMPLE::OnDisconnected callback is solicited, Identifier Rejected ');
+    }else if (_client.connectionStatus.returnCode == MqttConnectReturnCode.unacceptedProtocolVersion){
+        log('EXAMPLE::OnDisconnected callback is solicited, UnAccepted Protocol Version ');
     }
     _currentState.setAppConnectionState(MQTTAppConnectionState.disconnected);
   }

@@ -19,175 +19,178 @@ class CashierSalesStatus extends StatelessWidget{
     Widget switchScreen(MQTTAppState appState){
       switch (appState.getResponseObject['status_new']) {
         case "waitforapproval":
-            return  Column(        
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                Text("Данные транзакции: ",
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 22,
-                  fontWeight: FontWeight.bold
-                ),),
-                SizedBox(height: 20,),
+            return  Padding(
+              padding: const EdgeInsets.only(left: 10,top:5),
+              child: Column(        
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                  Text("Данные транзакции: ",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 22,
+                    fontWeight: FontWeight.bold
+                  ),),
+                  SizedBox(height: 20,),
 
-                Padding(
-                 padding: const EdgeInsets.symmetric(vertical: 10),
-                 child: RichText(
-                    textAlign: TextAlign.start,
-                    text: TextSpan(
-                        style: TextStyle(
-                          fontSize: 14.0,
-                          color:Colors.black,
-                        ),
-                        children:<TextSpan>[
-                                TextSpan(text: 'ID: ',
-                                      style: TextStyle(fontSize: 20 )),
-                                TextSpan(
-                                    text: '${appState.getResponseObject['transaction_id'].toString()}',
-                                    style: TextStyle(fontWeight: FontWeight.bold,fontSize: 20)),                           
-                              ]
-                            ),
-                  ),
-               ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 10),
-                  child: RichText(
-                    textAlign: TextAlign.start,
-                    text: TextSpan(
-                        style: TextStyle(
-                          fontSize: 14.0,
-                          color:Colors.black,
-                        ),
-                        children:<TextSpan>[
-                                TextSpan(text: 'Клиент: ',
-                                      style: TextStyle(fontSize: 18 )),
-                                TextSpan(
-                                    text: '${appState.getResponseObject['client_company']}',
-                                    style: TextStyle(fontWeight: FontWeight.bold,fontSize: 18)),                           
-                              ]
-                            ),
-                  ),
-                ),
-                Padding(
-                  padding:const EdgeInsets.symmetric(vertical: 10),
-                  child: RichText(
-                    textAlign: TextAlign.start,
-                    text: TextSpan(
-                        style: TextStyle(
-                          fontSize: 14.0,
-                          color:Colors.black,
-                        ),
-                        children:<TextSpan>[
-                                TextSpan(text: 'Логин пользователя: ',
-                                      style: TextStyle(fontSize: 18 )),
-                                TextSpan(
-                                    text: '${appState.getResponseObject['client_login']}',
-                                    style: TextStyle(fontWeight: FontWeight.bold,fontSize: 18)),                           
-                              ]
-                            ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 10),
-                  child: RichText(
-                  textAlign: TextAlign.start,
-                  text: TextSpan(
-                      style: TextStyle(
-                        fontSize: 14.0,
-                        color:Colors.black,
-                      ),
-                      children:<TextSpan>[
-                              TextSpan(text: 'Топливо: ',
-                                    style: TextStyle(fontSize: 18 )),
-                              TextSpan(
-                                  text: '${appState.getResponseObject['fuel']} / ${appState.getResponseObject['price']} Т/л',
-                                  style: TextStyle(fontWeight: FontWeight.bold,fontSize: 18)),                           
-                            ]
+                  Padding(
+                   padding: const EdgeInsets.symmetric(vertical: 10),
+                   child: RichText(
+                      textAlign: TextAlign.start,
+                      text: TextSpan(
+                          style: TextStyle(
+                            fontSize: 14.0,
+                            color:Colors.black,
                           ),
-              ),
-                ),
-                Padding(
-                 padding: const EdgeInsets.symmetric(vertical: 10),
-                 child: RichText(
-                    textAlign: TextAlign.start,
-                    text: TextSpan(
-                        style: TextStyle(
-                          fontSize: 14.0,
-                          color:Colors.black,
-                        ),
-                        children:<TextSpan>[
-                                TextSpan(text: 'Количество: ',
-                                      style: TextStyle(fontSize: 18 )),
-                                TextSpan(
-                                    text: '${appState.getResponseObject['quantity']} л',
-                                    style: TextStyle(fontWeight: FontWeight.bold,fontSize: 18)),                           
-                              ]
-                            ),
-                  ),
-               ),
-                Padding(
-                  padding:const EdgeInsets.symmetric(vertical: 10),
-                  child: RichText(
-                    textAlign: TextAlign.start,
-                    text: TextSpan(
-                        style: TextStyle(
-                          fontSize: 14.0,
-                          color:Colors.black,
-                        ),
-                        children:<TextSpan>[
-                                TextSpan(text: 'Сумма: ',
-                                      style: TextStyle(fontSize: 18 )),
-                                TextSpan(
-                                    text: '${appState.getResponseObject['total_price']} л',
-                                    style: TextStyle(fontWeight: FontWeight.bold,fontSize: 18)),                           
-                              ]
-                            ),
-                  ),
-                ),
-                SizedBox(height: 70,),
-                Center(
-                  child: FlatButton(
-                            shape:  RoundedRectangleBorder(
-                                borderRadius:  BorderRadius.circular(10.0)),
-                            color: Colors.orange[100],
-                            splashColor: Colors.orangeAccent[200],
-                            child: Padding(
-                              padding: const EdgeInsets.all(15.0),
-                              child: Text(
-                                "Продолжить",
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                    fontSize: 24,
-                                    color: Colors.orange,
-                                    fontWeight: FontWeight.bold),
+                          children:<TextSpan>[
+                                  TextSpan(text: 'ID: ',
+                                        style: TextStyle(fontSize: 20 )),
+                                  TextSpan(
+                                      text: '${appState.getResponseObject['transaction_id'].toString()}',
+                                      style: TextStyle(fontWeight: FontWeight.bold,fontSize: 20)),                           
+                                ]
                               ),
-                            ),
-                            onPressed: () => appState.confirmPayment(appState.getResponseObject['transaction_id']),
-                          ),
-                ),
-                SizedBox(height: 100,),
-                Center(
-                  child: FlatButton(
-                            shape:  RoundedRectangleBorder(
-                                borderRadius:  BorderRadius.circular(10.0)),
-                            color: Colors.grey,
-                            splashColor: Colors.orangeAccent[200],
-                            child: Padding(
-                              padding: const EdgeInsets.all(10.0),
-                              child: Text(
-                                " Отменить ",
-                                style: TextStyle(
-                                    fontSize: 24,
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold),
-                              ),
-                            ),
-                            onPressed: () => Navigator.pop(context)
-                          ),
                     ),
-                  ],
-                );        
+                 ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 10),
+                    child: RichText(
+                      textAlign: TextAlign.start,
+                      text: TextSpan(
+                          style: TextStyle(
+                            fontSize: 14.0,
+                            color:Colors.black,
+                          ),
+                          children:<TextSpan>[
+                                  TextSpan(text: 'Клиент: ',
+                                        style: TextStyle(fontSize: 18 )),
+                                  TextSpan(
+                                      text: '${appState.getResponseObject['client_company']}',
+                                      style: TextStyle(fontWeight: FontWeight.bold,fontSize: 18)),                           
+                                ]
+                              ),
+                    ),
+                  ),
+                  Padding(
+                    padding:const EdgeInsets.symmetric(vertical: 10),
+                    child: RichText(
+                      textAlign: TextAlign.start,
+                      text: TextSpan(
+                          style: TextStyle(
+                            fontSize: 14.0,
+                            color:Colors.black,
+                          ),
+                          children:<TextSpan>[
+                                  TextSpan(text: 'Логин пользователя: ',
+                                        style: TextStyle(fontSize: 18 )),
+                                  TextSpan(
+                                      text: '${appState.getResponseObject['client_login']}',
+                                      style: TextStyle(fontWeight: FontWeight.bold,fontSize: 18)),                           
+                                ]
+                              ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 10),
+                    child: RichText(
+                    textAlign: TextAlign.start,
+                    text: TextSpan(
+                        style: TextStyle(
+                          fontSize: 14.0,
+                          color:Colors.black,
+                        ),
+                        children:<TextSpan>[
+                                TextSpan(text: 'Топливо: ',
+                                      style: TextStyle(fontSize: 18 )),
+                                TextSpan(
+                                    text: '${appState.getResponseObject['fuel']} / ${appState.getResponseObject['price']} Т/л',
+                                    style: TextStyle(fontWeight: FontWeight.bold,fontSize: 18)),                           
+                              ]
+                            ),
+                ),
+                  ),
+                  Padding(
+                   padding: const EdgeInsets.symmetric(vertical: 10),
+                   child: RichText(
+                      textAlign: TextAlign.start,
+                      text: TextSpan(
+                          style: TextStyle(
+                            fontSize: 14.0,
+                            color:Colors.black,
+                          ),
+                          children:<TextSpan>[
+                                  TextSpan(text: 'Количество: ',
+                                        style: TextStyle(fontSize: 18 )),
+                                  TextSpan(
+                                      text: '${appState.getResponseObject['quantity']} л',
+                                      style: TextStyle(fontWeight: FontWeight.bold,fontSize: 18)),                           
+                                ]
+                              ),
+                    ),
+                 ),
+                  Padding(
+                    padding:const EdgeInsets.symmetric(vertical: 10),
+                    child: RichText(
+                      textAlign: TextAlign.start,
+                      text: TextSpan(
+                          style: TextStyle(
+                            fontSize: 14.0,
+                            color:Colors.black,
+                          ),
+                          children:<TextSpan>[
+                                  TextSpan(text: 'Сумма: ',
+                                        style: TextStyle(fontSize: 18 )),
+                                  TextSpan(
+                                      text: '${appState.getResponseObject['total_price']} КZT',
+                                      style: TextStyle(fontWeight: FontWeight.bold,fontSize: 18)),                           
+                                ]
+                              ),
+                    ),
+                  ),
+                  SizedBox(height: 70,),
+                  Center(
+                    child: FlatButton(
+                              shape:  RoundedRectangleBorder(
+                                  borderRadius:  BorderRadius.circular(10.0)),
+                              color: Colors.orange[100],
+                              splashColor: Colors.orangeAccent[200],
+                              child: Padding(
+                                padding: const EdgeInsets.all(15.0),
+                                child: Text(
+                                  "Продолжить",
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      fontSize: 24,
+                                      color: Colors.orange,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              ),
+                              onPressed: () => appState.confirmPayment(appState.getResponseObject['transaction_id']),
+                            ),
+                  ),
+                  SizedBox(height: 100,),
+                  Center(
+                    child: FlatButton(
+                              shape:  RoundedRectangleBorder(
+                                  borderRadius:  BorderRadius.circular(10.0)),
+                              color: Colors.grey,
+                              splashColor: Colors.orangeAccent[200],
+                              child: Padding(
+                                padding: const EdgeInsets.all(10.0),
+                                child: Text(
+                                  " Отменить ",
+                                  style: TextStyle(
+                                      fontSize: 24,
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              ),
+                              onPressed: () => Navigator.pop(context)
+                            ),
+                      ),
+                    ],
+                  ),
+            );        
           break;
         case "canceled":
             return  Column(        

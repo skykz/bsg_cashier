@@ -22,7 +22,7 @@ class _LoginScreenState extends State<LoginScreen> {
   TextEditingController _passwordValue = TextEditingController();
 
   MaskTextInputFormatter _phoneValueController = MaskTextInputFormatter(
-      mask: 'e ##########',
+      mask: 'e ##############',
       filter: {"#": RegExp(r'[0-9]')});
 
   @override

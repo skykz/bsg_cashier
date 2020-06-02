@@ -42,7 +42,7 @@ class NetworkCall {
         response =
             await dio.request(path, queryParameters: requestParams, data: body);
       
-      // log(" - Response - ",name: " api route -- $path");
+      log("api route -- $path");
       printWrapped(' ==== RESPONSE: $response');
 
       _decodedRes = _decoder.convert(response.toString());
@@ -78,7 +78,7 @@ class NetworkCall {
           await dio.request(path, queryParameters: requestParams, data: body);
 
       // if(path != '/image' && path != '/specialist/chat/get'){
-      // log(" - Response - ",name: " api route -- $path");
+      log("api route -- $path");
       printWrapped(' ==== RESPONSE: $response');
 
       // }

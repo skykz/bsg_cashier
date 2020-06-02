@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:imei_plugin/imei_plugin.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:bsg/core/models/printer_model.dart';
 
 import 'core/models/imei_data.dart';
 import 'core/models/mqtt_model.dart';
