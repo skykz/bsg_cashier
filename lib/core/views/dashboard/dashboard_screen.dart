@@ -18,8 +18,9 @@ typedef KeyCallBack = void Function(Key key);
 
 class DashBoardCashier extends StatefulWidget {
   final List<dynamic> object;  
+  final String cashier;
   final BlueThermalPrinter blueThermalPrinter;
-  const DashBoardCashier({Key key,this.object,this.blueThermalPrinter}) : super(key: key);
+  const DashBoardCashier({Key key,this.object,this.cashier,this.blueThermalPrinter}) : super(key: key);
 
 
   _MyAppState createState() => _MyAppState();
@@ -422,6 +423,7 @@ class _MyAppState extends State<DashBoardCashier> {
              if(value['sale'] != null)
               Navigator.push(context,MaterialPageRoute(builder: (context) => 
                   CashierSalesStatus(
+                        cashier:widget.cashier,
                         bluetooth:widget.blueThermalPrinter,
                         id: value['sale']['id'],
               )));

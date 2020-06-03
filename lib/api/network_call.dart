@@ -30,8 +30,8 @@ class NetworkCall {
     BaseOptions options = BaseOptions(
 
         baseUrl: BASE_URL, //base server url
-        connectTimeout: 20000, // 10 sec.
-        receiveTimeout: 20000,               
+        // connectTimeout: 20000, // 10 sec.
+        // receiveTimeout: 20000,               
         method: method,);               
         //contentType: ContentType.parse("application/json").value);
 
@@ -64,8 +64,8 @@ class NetworkCall {
 
     BaseOptions options = BaseOptions(
       baseUrl: BASE_URL, //base server url
-      connectTimeout:20000, // 10 sec.
-      receiveTimeout:20000,
+      // connectTimeout:20000, // 10 sec.
+      // receiveTimeout:20000,
       method: method,
       headers: {'Authorization': 'Bearer ' + accessToken},
       contentType: 'application/json',

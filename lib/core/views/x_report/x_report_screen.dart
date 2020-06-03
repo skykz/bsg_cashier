@@ -9,7 +9,8 @@ import 'package:flutter/services.dart';
 
 class XReportScreen extends StatefulWidget{  
   final String cashier;
-  XReportScreen({this.cashier});
+  final BlueThermalPrinter bluetooth;
+  XReportScreen({this.cashier,this.bluetooth});
 
   @override
   _XReportScreenState createState() => _XReportScreenState();
@@ -21,12 +22,15 @@ class _XReportScreenState extends State<XReportScreen> {
   List<BluetoothDevice> _devices = [];
   BluetoothDevice _bluetoothDevice;
   bool _connected = false;
+  String year;
+  String date;
+
   String pathImage;
 
   @override
   void initState() {    
     
-    initPlatformState();
+    //initPlatformState();
    
 
     super.initState();   
@@ -126,16 +130,16 @@ class _XReportScreenState extends State<XReportScreen> {
             centerTitle: true,
             backgroundColor: Colors.white,
             actions: <Widget>[
-              Expanded(
-                      child: Center(
-                        child: DropdownButton(
-                          items: _getDeviceItems(),
-                          onChanged: (value) => setState(() => _bluetoothDevice = value),
-                          value: _bluetoothDevice,
-                          onTap: _connect,
-                        ),
-                      ),
-                    ),              
+              // Expanded(
+              //         child: Center(
+              //           child: DropdownButton(
+              //             items: _getDeviceItems(),
+              //             onChanged: (value) => setState(() => _bluetoothDevice = value),
+              //             value: _bluetoothDevice,
+              //             onTap: _connect,
+              //           ),
+              //         ),
+              //       ),              
             ],
           ),
           body: SingleChildScrollView(
@@ -197,8 +201,13 @@ class _XReportScreenState extends State<XReportScreen> {
                                 itemExtent: 80,
                                 shrinkWrap: true,
                                 physics: AlwaysScrollableScrollPhysics(),
-                                    itemBuilder: (context, i) =>  
-                                    Container(
+                                    itemBuilder: (context, i) {
+                                      DateTime a = DateTime.tryParse(snapshot.data['sales'][i]['datetime']); 
+                                      String b = TimeOfDay.fromDateTime(a).format(context);    
+                                    
+                                    year = "${DateTime.parse(snapshot.data['sales'][i]['datetime']).year}-${DateTime.parse(snapshot.data['sales'][i]['datetime']).month}-${DateTime.parse(snapshot.data['sales'][i]['datetime']).day}";
+                                    date = b;
+                                    return Container(
                                       color: snapshot.data['sales'][i]['status'] == 'refund'?Colors.red[100]:Colors.green[100],
                                       child: Padding(
                                           padding: const EdgeInsets.all(5.0),
@@ -213,7 +222,7 @@ class _XReportScreenState extends State<XReportScreen> {
                                                 child: Text("${snapshot.data['sales'][i]['id']}",style: TextStyle(fontWeight: FontWeight.bold),)),
                                               Flexible(
                                                 flex: 2,
-                                                child: Text("${DateTime.parse(snapshot.data['sales'][i]['datetime']).toLocal()}",style: TextStyle(fontWeight: FontWeight.bold),)),
+                                                 child: Text("$year \n $b",style: TextStyle(fontWeight: FontWeight.bold),)),
                                               Flexible(
                                                 flex: 2,
                                                 child: Text("${snapshot.data['sales'][i]['fuel']}\n ${snapshot.data['sales'][i]['price']}  ₸/л.",style: TextStyle(fontWeight: FontWeight.bold),)),
@@ -223,9 +232,9 @@ class _XReportScreenState extends State<XReportScreen> {
                                                 "${snapshot.data['sales'][i]['status'] == 'refund'?'-':''} ${snapshot.data['sales'][i]['quantity']}",style: TextStyle(fontWeight: FontWeight.bold),))
                                             ],
                                           ),
-                                ),
-                                    ),                              
-                              ),
+                                  ),
+                                );                              }
+                              )
                             );  
                         }),     
                          Center(
@@ -280,9 +289,9 @@ class _XReportScreenState extends State<XReportScreen> {
           for (var i = 0; i < list['sales'].length; i++) {      
             bluetooth.printCustom("${widget.cashier}", 1, 0);          
             bluetooth.printCustom(
-            "Data:  ${list['sales'][i]['datetime']} \n"+
-            "Time:  14:18:37 \n"+
-            "GAS:  ${list['sales'][i]['fuel']}\n"+
+            "Data:  $year \n"+
+            "Time:  $date \n"+
+            "GAS:  ${(list['sales'][i]['fuel']).toString().replaceAll("АИ","Au")}\n"+
             "Litters:  ${list['sales'][i]['quantity']} L\n"+
             "Price:   ${list['sales'][i]['price']} KZT/L\n "+
             "Sum:  ${list['sales'][i]['total_price']} KZT \n", 1, 1);                                          

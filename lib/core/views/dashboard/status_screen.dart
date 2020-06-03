@@ -8,8 +8,9 @@ import 'package:provider/provider.dart';
 
 class CashierSalesStatus extends StatelessWidget{
   final int id;
+  final String cashier;
   final BlueThermalPrinter bluetooth;
-  CashierSalesStatus({Key key,this.id,this.bluetooth}):super(key:key);
+  CashierSalesStatus({Key key,this.id,this.cashier,this.bluetooth}):super(key:key);
   bool isLoaded = true;
 
   @override
@@ -360,29 +361,49 @@ class CashierSalesStatus extends StatelessWidget{
 
      bluetooth.isConnected.then((isConnected) {
       if (isConnected) {
-      
-            bluetooth.printLeftRight("LEFT", "RIGHT", 0);
-            bluetooth.printLeftRight("LEFT", "RIGHT", 1);
+          if(appState.dataFromMqtt != null){
+            
+            DateTime a = DateTime.tryParse(appState.dataFromMqtt['datetime']); 
+            String b = TimeOfDay.fromDateTime(a).format(context);    
+            
+            String year = "${DateTime.parse(appState.dataFromMqtt['datetime']).year}-"+
+                      "${DateTime.parse(appState.dataFromMqtt['datetime']).month}-"+
+                      "${DateTime.parse(appState.dataFromMqtt['datetime']).day}";
+
             bluetooth.printNewLine();
-            bluetooth.printLeftRight("LEFT", "RIGHT", 2);
-            bluetooth.printLeftRight("LEFT", "RIGHT", 3);
-            bluetooth.printLeftRight("LEFT", "RIGHT", 4);
-            bluetooth.printCustom("Body left", 1, 0);
-            bluetooth.printCustom("Body right", 0, 2);
+            bluetooth.printCustom("Payment Success", 4, 1);      
+            bluetooth.printCustom("----------------------------", 1, 1);
             bluetooth.printNewLine();
-            bluetooth.printCustom("Thank You", 2, 1);
+
+             
+            bluetooth.printCustom("Cashier:  $cashier", 1, 0);          
+            bluetooth.printCustom(
+            "ID:  ${appState.dataFromMqtt['transaction_id']} \n"+
+            "Data:  $year \n"+
+            "Time:  $b \n"+
+            "Client login:  ${appState.dataFromMqtt['client_login']} \n"+
+            "Status:  ${(appState.dataFromMqtt['status_new'])} \n" +
+            "GAS:  ${(appState.dataFromMqtt['fuel']).toString().replaceAll("АИ","Au")}\n"+
+            "Litters:  ${appState.dataFromMqtt['quantity']} L\n"+
+            "Price:   ${appState.dataFromMqtt['price']} KZT/L\n "+
+            "Sum:  ${appState.dataFromMqtt['total_price']} KZT \n", 1, 1);                                          
+            
+            bluetooth.printCustom("----------------------------", 1, 1);        
             bluetooth.printNewLine();
-            bluetooth.printQRcode("Insert Your Own Text to Generate", 200, 200, 1);
+            bluetooth.printNewLine();
             bluetooth.printNewLine();
             bluetooth.printNewLine();
             bluetooth.paperCut();
-          
+
+              appState.setNulltoObject();                   
+              Navigator.pop(context);
+              Navigator.pop(context);
+          }    
+        showCustomSnackBar(context, 'Данные из MQTT пусто', Colors.redAccent, Icons.info_outline);
+
       }else{
         showCustomSnackBar(context, 'Bluetooth не подключен!', Colors.redAccent, Icons.info_outline);
-      }       
-        appState.setNulltoObject();                   
-        Navigator.pop(context);
-        Navigator.pop(context);
+      }             
      });
   }
 

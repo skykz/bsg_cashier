@@ -11,10 +11,13 @@ class MQTTAppState with ChangeNotifier{
   dynamic get getResponseObject => _receivedObject;
   BsgAPI _api = BsgAPI();
   bool _isSuccess = false;
+  dynamic _dataMqtt;
+  dynamic get dataFromMqtt => _dataMqtt;
   bool get isSuccessfull => _isSuccess;
 
   void setReceivedText(dynamic text) {
     this._receivedObject = text;
+    this._dataMqtt = text;
     log("message ------------ $text");
     notifyListeners();
   }

@@ -433,6 +433,7 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
                                               builder: (context) => DashBoardCashier(
                                                 blueThermalPrinter:bluetooth,
                                                 object: snapshot.data['shift']['fuels'],
+                                                cashier:cashier
                                               )))
                                   ),                           
                                    FlatButton(
